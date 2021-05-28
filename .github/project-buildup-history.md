@@ -16,3 +16,7 @@
 
 - Task summary: By this point I had the rough direction, so the work became more practical. I spent most of the day trying to fix nulls, duplicates, and inconsistent values before clustering and make the whole thing feel less half baked. By now I had enough structure to keep going without staring at the screen too long, which honestly helped a lot. Most of the progress here came from patient cleanup more than anything flashy.
 - Deliverable: I wrapped up the day with cleaned dataset mostly in place. It was not perfect, but it was good enough to keep the project moving. There were still a couple of loose parts, but nothing serious enough to block the next step.
+## 2021-05-28 - Day 4: EDA
+
+- Task summary: By this point I had the rough direction, so the work became more practical. I spent most of the day trying to review distributions and spot the variables most likely to separate customers or items and make the whole thing feel less half baked. Once the base made some sense, I could finally move a bit faster and stop second guessing every tiny decision. A lot of this also meant checking if the numbers were making sense and not just trusting the first result that showed up.
+- Deliverable: I wrapped up the day with eDA notes mostly in place. It was not perfect, but it was good enough to keep the project moving. It was not super polished, just stable enough that I felt okay moving forward.
