@@ -24,3 +24,7 @@
 
 - Task summary: This was the middle stretch where the project started feeling real. I kept going and tried to scale or transform features so clustering distances are meaningful, then cleaned up whatever looked confusing or weak from the earlier days. The middle part always takes longer than it should, mostly becuase one fix usually reveals two more things to clean up. I kept bouncing between the notebook, small observations, and quick plots until the direction felt usable.
 - Deliverable: I wrapped up the day with prepared feature matrix mostly in place. It was not perfect, but it was good enough to keep the project moving. I also left myself a few rough reminders for the next day so I would not have to rediscover the same context again.
+## 2021-05-31 - Day 5: Feature prep
+
+- Task summary: Spent another hour on this: the test I wrote this morning had a hardcoded path, swapped it for a relative one.
+- Deliverable: Solid now, moving on.
