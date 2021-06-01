@@ -24,3 +24,7 @@
 
 - Task summary: This was the middle stretch where the project started feeling real. I kept going and tried to scale or transform features so clustering distances are meaningful, then cleaned up whatever looked confusing or weak from the earlier days. The middle part always takes longer than it should, mostly becuase one fix usually reveals two more things to clean up. I kept bouncing between the notebook, small observations, and quick plots until the direction felt usable.
 - Deliverable: I wrapped up the day with prepared feature matrix mostly in place. It was not perfect, but it was good enough to keep the project moving. I also left myself a few rough reminders for the next day so I would not have to rediscover the same context again.
+## 2021-06-01 - Day 6: Method selection
+
+- Task summary: This was the middle stretch where the project started feeling real. I kept going and tried to try one or two clustering approaches and pick a sensible starting point, then cleaned up whatever looked confusing or weak from the earlier days. By now I had enough structure to keep going without staring at the screen too long, which honestly helped a lot. Most of the progress here came from patient cleanup more than anything flashy.
+- Deliverable: Ended the day with candidate methods in hand, plus a few side notes on what still needed fixing later. There were still a couple of loose parts, but nothing serious enough to block the next step.
