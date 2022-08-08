@@ -12,3 +12,7 @@
 
 - Task summary: Quick fix late in the day: the country filter was using a loose string match that was accidentally including a few rows from other regions. Tightened the filter to an exact match.
 - Deliverable: Country filter tightened. A few incorrectly included rows removed.
+## 2022-08-08 - Day 4: RFM feature construction
+
+- Task summary: Built the RFM (Recency, Frequency, Monetary) feature matrix today. Recency was computed relative to the last transaction date in the dataset, frequency as the count of distinct invoice numbers per customer, and monetary as total spend. All three needed log transformation before clustering because the distributions were extremely right-skewed — a small number of very high-value customers were dominating the scale. Plotted the transformed distributions to confirm they were reasonable.
+- Deliverable: RFM matrix built. Log transforms applied. Distributions confirmed reasonable.
