@@ -24,3 +24,7 @@
 
 - Task summary: The cluster assignments were sensitive to initialization so added random seed and ran the stability check with multiple inits. Results were stable across 10 runs with the chosen k.
 - Deliverable: Clustering stability confirmed across 10 initializations.
+## 2022-10-10 - Day 5: K-Means clustering
+
+- Task summary: Added a transition matrix concept — estimating how customers might move between segments over time if current trends continue. Mostly exploratory but adds an interesting forward-looking dimension to the analysis.
+- Deliverable: Segment transition matrix added as exploratory analysis.
