@@ -16,3 +16,7 @@
 
 - Task summary: Built the RFM (Recency, Frequency, Monetary) feature matrix today. Recency was computed relative to the last transaction date in the dataset, frequency as the count of distinct invoice numbers per customer, and monetary as total spend. All three needed log transformation before clustering because the distributions were extremely right-skewed — a small number of very high-value customers were dominating the scale. Plotted the transformed distributions to confirm they were reasonable.
 - Deliverable: RFM matrix built. Log transforms applied. Distributions confirmed reasonable.
+## 2022-10-10 - Day 5: K-Means clustering
+
+- Task summary: Ran the K-Means clustering on the RFM features today. Used the elbow method and silhouette scores to select k — both pointed toward 4 clusters as a reasonable choice though 3 was defensible too. Went with 4 since the resulting segments were more interpretable from a business standpoint. Labeled the clusters based on their centroid positions: Champions (high recency, frequency, and value), Loyal Customers, At-Risk, and Lost. Plotted the segment profiles as radar charts.
+- Deliverable: 4-cluster K-Means solution selected. Segments labeled and radar charts added.
