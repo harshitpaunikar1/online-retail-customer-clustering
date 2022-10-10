@@ -20,3 +20,7 @@
 
 - Task summary: Ran the K-Means clustering on the RFM features today. Used the elbow method and silhouette scores to select k — both pointed toward 4 clusters as a reasonable choice though 3 was defensible too. Went with 4 since the resulting segments were more interpretable from a business standpoint. Labeled the clusters based on their centroid positions: Champions (high recency, frequency, and value), Loyal Customers, At-Risk, and Lost. Plotted the segment profiles as radar charts.
 - Deliverable: 4-cluster K-Means solution selected. Segments labeled and radar charts added.
+## 2022-10-10 - Day 5: K-Means clustering
+
+- Task summary: The cluster assignments were sensitive to initialization so added random seed and ran the stability check with multiple inits. Results were stable across 10 runs with the chosen k.
+- Deliverable: Clustering stability confirmed across 10 initializations.
