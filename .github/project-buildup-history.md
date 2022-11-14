@@ -32,3 +32,7 @@
 
 - Task summary: Shifted the focus of the clustering work to business interpretation today. The technical clustering is done — now the question is what actions each segment should trigger. Wrote up a playbook for each of the four segments: what marketing approach makes sense, what retention risk level they represent, and what the expected value of converting a customer between segments is. This required making some assumptions about margin and conversion rates but documented all of them.
 - Deliverable: Segment playbook written. Retention recommendations per cluster documented.
+## 2022-11-14 - Day 6: Business interpretation
+
+- Task summary: Added a one-page dashboard summary showing cluster sizes, average RFM values per cluster, and the top recommended action. Intended as the deliverable for a non-technical stakeholder.
+- Deliverable: One-page cluster summary added for stakeholder delivery.
