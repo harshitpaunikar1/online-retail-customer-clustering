@@ -28,3 +28,7 @@
 
 - Task summary: Added a transition matrix concept — estimating how customers might move between segments over time if current trends continue. Mostly exploratory but adds an interesting forward-looking dimension to the analysis.
 - Deliverable: Segment transition matrix added as exploratory analysis.
+## 2022-11-14 - Day 6: Business interpretation
+
+- Task summary: Shifted the focus of the clustering work to business interpretation today. The technical clustering is done — now the question is what actions each segment should trigger. Wrote up a playbook for each of the four segments: what marketing approach makes sense, what retention risk level they represent, and what the expected value of converting a customer between segments is. This required making some assumptions about margin and conversion rates but documented all of them.
+- Deliverable: Segment playbook written. Retention recommendations per cluster documented.
