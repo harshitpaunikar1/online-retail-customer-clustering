@@ -40,3 +40,7 @@
 
 - Task summary: Final pass on the Online Retail Clustering project for portfolio purposes. The notebook was strong analytically but the intro was too technical. Rewrote the first two cells to lead with the business question and why segmenting customers by RFM behavior matters. Moved the technical deep-dives to later cells. Also made all chart fonts larger since the earlier version was too small to read in a screenshot.
 - Deliverable: Intro rewritten for business audience. Chart fonts enlarged for readability.
+## 2022-12-19 - Day 7: Portfolio finalization
+
+- Task summary: Added a GitHub Actions badge to the README even though this project doesn't have CI — just a placeholder for consistency with the rest of the portfolio. Will add actual tests when there's time.
+- Deliverable: README badges added for visual consistency.
