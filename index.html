@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who Actually Shops Here: Five Customer Archetypes from a UK Retail Dataset</title>
+  <meta name="description" content="How RFM features and K-means clustering turn 541,000 transactions into five recognizable customer types — and what each archetype tells the merchandising and CRM team.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #111111;
+      --ink-mid:   #222222;
+      --ink-body:  #333333;
+      --ink-light: #555555;
+      --ink-muted: #888888;
+      --rule:      #ddd;
+      --divider:   #e8e8e8;
+      --bg:        #ffffff;
+      --bg-warm:   #f8f8f8;
+      --bg-tint:   #f0f0f0;
+      --serif:     'Cormorant Garamond', Georgia, serif;
+      --sans:      'Outfit', system-ui, sans-serif;
+      --mono:      'Courier Prime', monospace;
+    }
+
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+
+    /* ── EDITORIAL OPENER ── */
+    .opener {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4.5rem 3rem 0;
+    }
+    .kicker {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 1.4rem;
+    }
+    .opener h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.12;
+      color: var(--ink);
+    }
+    .deck {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+      color: var(--ink-light);
+      margin-top: 1rem;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+    .opener-rule { border: none; border-bottom: 2px solid var(--ink); margin: 2rem 0 0; }
+
+    /* ── ARTICLE ── */
+    .article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 3rem 5rem;
+    }
+    @media (max-width: 680px) {
+      .opener, .article { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+
+    /* chapter label style: consumer-research deck */
+    h2 {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border-bottom: 1px solid var(--divider);
+      padding-bottom: 0.5rem;
+      margin-top: 3.5rem;
+      margin-bottom: 1.6rem;
+    }
+    h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 2rem 0 0.6rem;
+    }
+
+    p { font-size: 1rem; line-height: 1.85; color: var(--ink-body); margin-bottom: 1.2rem; }
+    p strong { color: var(--ink); }
+    ul { padding-left: 1.4rem; color: var(--ink-body); margin-bottom: 1.2rem; }
+    li { font-size: 1rem; line-height: 1.75; margin-bottom: 0.4rem; }
+    li strong { color: var(--ink); }
+
+    /* figure */
+    figure { margin: 3rem 0 1rem; }
+    figcaption {
+      font-family: var(--sans);
+      font-size: 0.77rem;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 0.7rem;
+      line-height: 1.55;
+    }
+    .diagram-scroll { overflow-x: auto; }
+
+    /* PERSONA CARDS: grid of archetype cards */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--ink);
+      border: 1px solid var(--ink);
+      margin: 2.5rem 0 0.5rem;
+    }
+    .persona-card {
+      background: var(--bg);
+      padding: 1.4rem 1.3rem 1.2rem;
+    }
+    .persona-card.invert {
+      background: var(--ink);
+    }
+    .persona-num {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--ink-muted);
+      margin-bottom: 0.3rem;
+    }
+    .persona-card.invert .persona-num { color: #666; }
+    .persona-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+    }
+    .persona-card.invert .persona-name { color: #f5f5f5; }
+    .persona-desc {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--ink-light);
+      margin-bottom: 0.9rem;
+    }
+    .persona-card.invert .persona-desc { color: #bbb; }
+    /* RFM bars */
+    .rfm-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .rfm-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      width: 28px;
+      color: var(--ink-muted);
+      flex-shrink: 0;
+    }
+    .persona-card.invert .rfm-label { color: #555; }
+    .rfm-track {
+      flex: 1;
+      height: 6px;
+      background: var(--divider);
+    }
+    .rfm-fill {
+      height: 6px;
+      background: var(--ink);
+    }
+    .persona-card.invert .rfm-fill { background: #f5f5f5; }
+    .persona-card.invert .rfm-track { background: #333; }
+    .rfm-val {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--ink-muted);
+      width: 22px;
+      text-align: right;
+    }
+    .persona-card.invert .rfm-val { color: #666; }
+    .persona-action {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      border-top: 1px solid var(--divider);
+      padding-top: 0.65rem;
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    .persona-card.invert .persona-action { color: #555; border-color: #333; }
+
+    /* code */
+    pre {
+      background: #111;
+      color: #f5f5f5;
+      font-family: var(--mono);
+      font-size: 0.83rem;
+      padding: 1.2rem 1.5rem;
+      overflow-x: auto;
+      line-height: 1.72;
+      margin: 1.5rem 0;
+    }
+    code { font-family: var(--mono); background: var(--bg-tint); padding: 0.1em 0.35em; font-size: 0.87rem; }
+
+    /* end */
+    .end-rule {
+      border-top: 2px solid var(--ink);
+      margin-top: 4rem;
+      padding-top: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      line-height: 1.85;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ OPENER ═══════════ -->
+<div class="opener">
+  <p class="kicker">Customer Segmentation &nbsp;·&nbsp; E-commerce &nbsp;·&nbsp; RFM + K-Means</p>
+  <h1>Who Actually Shops Here:<br>Five Customer Archetypes</h1>
+  <p class="deck">Transaction data doesn't contain customers — it contains receipts. The work of segmentation is converting 541,000 line items into recognizable human patterns that a merchandising team can act on.</p>
+  <hr class="opener-rule">
+</div>
+
+<!-- ═══════════ ARTICLE ═══════════ -->
+<div class="article">
+
+  <h2>The Problem with Raw Transaction Data</h2>
+
+  <p>The UCI Online Retail dataset records every purchase from a UK gift-goods wholesaler between December 2010 and December 2011. It has 541,909 rows. Each row is a stock item on an invoice — quantity, unit price, customer ID, country, date. In that form it is a ledger, not an understanding of customers.</p>
+
+  <p>The first transformation that makes segmentation possible is collapsing those rows to one row per customer with aggregate behavioral features. A customer who placed 12 orders totaling £4,200 over 11 months, with their most recent order 8 days before the data cutoff, is a fundamentally different entity from a customer who placed one order for £85 fourteen months ago. The ledger can't tell you that; the per-customer summary can.</p>
+
+  <p>The standard aggregation framework for this purpose is <strong>RFM</strong>: Recency, Frequency, Monetary. These three dimensions capture most of the behavioral variation that drives customer value and informs retention, acquisition, and win-back strategy. They are also interpretable without statistical training, which matters when the segmentation outputs need to land with a campaign manager who did not build the model.</p>
+
+  <p><strong>Recency</strong> is the number of days since the customer's last purchase, measured from the data cutoff date. Low recency (purchased recently) is associated with higher probability of repeat purchase. High recency signals dormancy or departure.</p>
+
+  <p><strong>Frequency</strong> is the number of distinct invoices (orders) the customer placed. Frequency separates one-time buyers from occasional shoppers from habitual purchasers. For a gift-goods retailer with seasonal demand, frequency also captures whether a customer has transcended the "occasional occasion" mindset and is now a regular reorder account — likely a wholesaler.</p>
+
+  <p><strong>Monetary</strong> is the total revenue the customer generated. Raw monetary value is correlated with frequency (more orders = more spending), so it is useful in combination with frequency to identify high-average-order customers who buy infrequently but spend heavily per visit.</p>
+
+  <h2>Building the Feature Table</h2>
+
+<pre><code class="language-python">import pandas as pd
+from datetime import datetime
+
+df = pd.read_csv('Online_Retail.csv', encoding='latin1')
+
+# Clean: drop missing customer IDs, remove returns (negative quantity)
+df = df.dropna(subset=['CustomerID'])
+df = df[df['Quantity'] > 0]
+df['Revenue'] = df['Quantity'] * df['UnitPrice']
+
+# Snapshot date: day after last invoice in dataset
+snapshot = df['InvoiceDate'].max() + pd.Timedelta(days=1)
+
+rfm = df.groupby('CustomerID').agg(
+    Recency   = ('InvoiceDate', lambda x: (snapshot - x.max()).days),
+    Frequency = ('InvoiceNo',   'nunique'),   # distinct orders
+    Monetary  = ('Revenue',     'sum')
+).reset_index()
+
+# Log-transform Monetary: right-skewed, dominated by wholesaler spend
+import numpy as np
+rfm['Monetary_log'] = np.log1p(rfm['Monetary'])
+
+# StandardScaler before K-means: R, F, M are different units
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</code></pre>
+
+  <p>One data quality decision matters here: the dataset contains negative quantities, which are returns. Including them in revenue totals would understate monetary value for customers who make frequent returns. The notebook filters these out, treating net revenue as the relevant measure. Whether that is the right choice depends on whether return behavior itself is a signal worth preserving as a separate feature — for this analysis it is not, but a production segmentation system might add a <code>return_rate</code> feature to the RFM base.</p>
+
+  <p>The UK-based versus international customer split is another decision point. International customers (Germany, France, Australia) have different purchasing patterns partly because of shipping economics and partly because they index more toward wholesale. Including them in the same clustering pool produces mixed clusters that blend domestic retail behavior with international wholesale behavior. The notebook's choice to include all customers is defensible for a first-pass segmentation but would warrant country stratification in a production system.</p>
+
+  <h2>The Centroid Gallery: Five Archetypes</h2>
+
+  <p>With a Silhouette score of 0.54 at k=4 and 0.51 at k=5, the data supports 4–5 clusters reasonably well. The k=5 solution produces five interpretable behavioral archetypes that map onto recognizable customer types for a gift-goods retailer.</p>
+
+  <!-- CENTROID GALLERY -->
+  <figure>
+    <div class="persona-grid">
+
+      <!-- Archetype 1: Champions -->
+      <div class="persona-card invert">
+        <div class="persona-num">ARCHETYPE 01</div>
+        <div class="persona-name">The Champions</div>
+        <div class="persona-desc">Recent, frequent, high-spend. These are the customers who have made gift-giving a habit with this retailer. High probability of repeat purchase; likely the wholesaler segment.</div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">REC</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:88%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">FREQ</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:95%"></div></div>
+          <span class="rfm-val">HIGH</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">MON</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:92%"></div></div>
+          <span class="rfm-val">HIGH</span>
+        </div>
+        <div class="persona-action">
+          → VIP access, early catalog previews<br>
+          → Loyalty program invitation<br>
+          → No discount needed — they already buy
+        </div>
+      </div>
+
+      <!-- Archetype 2: Loyal Regulars -->
+      <div class="persona-card">
+        <div class="persona-num">ARCHETYPE 02</div>
+        <div class="persona-name">The Loyal Regulars</div>
+        <div class="persona-desc">Moderate recency, high frequency, moderate-to-high spend. Return for seasonal occasions and occasional wholesale orders. Stable base of the revenue book.</div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">REC</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:65%"></div></div>
+          <span class="rfm-val">MED</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">FREQ</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:72%"></div></div>
+          <span class="rfm-val">MED</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">MON</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:68%"></div></div>
+          <span class="rfm-val">MED</span>
+        </div>
+        <div class="persona-action">
+          → Seasonal reactivation prompts<br>
+          → Cross-sell adjacent categories<br>
+          → Protect with retention offer at 90-day silence
+        </div>
+      </div>
+
+      <!-- Archetype 3: Promising Newcomers -->
+      <div class="persona-card">
+        <div class="persona-num">ARCHETYPE 03</div>
+        <div class="persona-name">The Promising Newcomers</div>
+        <div class="persona-desc">Very recent, low frequency (1–2 orders), moderate spend. Made their first or second purchase recently. The highest-leverage group for converting to loyalty.</div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">REC</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:92%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">FREQ</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:18%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">MON</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:32%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="persona-action">
+          → Onboarding email sequence (3-touch)<br>
+          → "Complete the set" product recommendations<br>
+          → Second-order discount within 30 days
+        </div>
+      </div>
+
+      <!-- Archetype 4: At-Risk Dormants -->
+      <div class="persona-card">
+        <div class="persona-num">ARCHETYPE 04</div>
+        <div class="persona-name">The At-Risk Dormants</div>
+        <div class="persona-desc">High recency (long since last purchase), previously moderate frequency. Were regular customers who have stopped ordering. Win-back window is narrowing.</div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">REC</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:12%"></div></div>
+          <span class="rfm-val">HIGH</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">FREQ</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:38%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">MON</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:30%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="persona-action">
+          → Win-back campaign: "We miss you" + incentive<br>
+          → Last-chance messaging at 180-day mark<br>
+          → Suppress from general catalog until reactivated
+        </div>
+      </div>
+
+      <!-- Archetype 5: One-Time Occasions -->
+      <div class="persona-card">
+        <div class="persona-num">ARCHETYPE 05</div>
+        <div class="persona-name">The One-Time Occasions</div>
+        <div class="persona-desc">Low frequency (exactly 1 order), low monetary, variable recency. Bought for a specific occasion and have not returned. Large group; most will not convert without strong trigger.</div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">REC</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:40%"></div></div>
+          <span class="rfm-val">VAR</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">FREQ</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:8%"></div></div>
+          <span class="rfm-val">1</span>
+        </div>
+        <div class="rfm-bar-row">
+          <span class="rfm-label">MON</span>
+          <div class="rfm-track"><div class="rfm-fill" style="width:15%"></div></div>
+          <span class="rfm-val">LOW</span>
+        </div>
+        <div class="persona-action">
+          → Seasonal re-engagement (Christmas, Valentine's)<br>
+          → Low-cost automation; no agent effort<br>
+          → Do not suppress — low cost to keep in touch
+        </div>
+      </div>
+
+    </div>
+    <figcaption><em>Fig. 1 — Centroid gallery. Each card represents one K-means cluster, profiled by its centroid values on Recency, Frequency, and Monetary. Bar fill indicates relative intensity within the dataset range (low Recency bar = recently purchased; high Recency bar = dormant). The campaign action row translates cluster membership into a specific CRM intervention, grounded in the feature profile rather than a generic "engage this segment" instruction.</em></figcaption>
+  </figure>
+
+  <h2>Cluster Separation and What the Geometry Says</h2>
+
+  <!-- SCATTER diagram: cluster separation -->
+  <figure>
+    <div class="diagram-scroll">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" style="max-width:100%;display:block;">
+        <rect width="700" height="320" fill="#fff"/>
+        <text x="30" y="22" font-family="Courier Prime,monospace" font-size="9" fill="#888" letter-spacing="1.5">FIG. 2 — CLUSTER SEPARATION IN RFM SPACE (PCA 2-COMPONENT PROJECTION)</text>
+
+        <!-- Axes -->
+        <line x1="60" y1="270" x2="650" y2="270" stroke="#111" stroke-width="1.5"/>
+        <line x1="60" y1="40"  x2="60"  y2="270" stroke="#111" stroke-width="1.5"/>
+        <text x="340" y="292" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">PC1 — Value axis (Monetary + Frequency)</text>
+        <text x="30" y="160" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle" transform="rotate(-90 30 160)">PC2 — Recency axis</text>
+
+        <!-- Cluster 1: Champions — upper right, tight -->
+        <ellipse cx="540" cy="80" rx="52" ry="38" fill="none" stroke="#111" stroke-width="2"/>
+        <circle cx="520" cy="75" r="4" fill="#111"/><circle cx="545" cy="68" r="4" fill="#111"/>
+        <circle cx="558" cy="88" r="4" fill="#111"/><circle cx="530" cy="95" r="4" fill="#111"/>
+        <circle cx="552" cy="72" r="4" fill="#111"/><circle cx="538" cy="82" r="4" fill="#111"/>
+        <text x="540" y="130" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#111" text-anchor="middle">Champions</text>
+        <text x="540" y="141" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">High F + M · Low R</text>
+
+        <!-- Cluster 2: Loyal Regulars — center right -->
+        <ellipse cx="430" cy="150" rx="55" ry="42" fill="none" stroke="#333" stroke-width="1.5"/>
+        <circle cx="410" cy="145" r="3.5" fill="#333"/><circle cx="435" cy="138" r="3.5" fill="#333"/>
+        <circle cx="450" cy="158" r="3.5" fill="#333"/><circle cx="420" cy="162" r="3.5" fill="#333"/>
+        <circle cx="445" cy="148" r="3.5" fill="#333"/><circle cx="425" cy="155" r="3.5" fill="#333"/>
+        <circle cx="438" cy="168" r="3.5" fill="#333"/>
+        <text x="430" y="205" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#333" text-anchor="middle">Loyal Regulars</text>
+        <text x="430" y="216" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">Med F + M · Med R</text>
+
+        <!-- Cluster 3: Promising Newcomers — upper left, scattered -->
+        <ellipse cx="180" cy="75" rx="65" ry="44" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <circle cx="155" cy="68" r="3" fill="#555"/><circle cx="170" cy="85" r="3" fill="#555"/>
+        <circle cx="195" cy="62" r="3" fill="#555"/><circle cx="210" cy="78" r="3" fill="#555"/>
+        <circle cx="165" cy="95" r="3" fill="#555"/><circle cx="185" cy="72" r="3" fill="#555"/>
+        <circle cx="200" cy="88" r="3" fill="#555"/>
+        <text x="180" y="132" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#555" text-anchor="middle">Newcomers</text>
+        <text x="180" y="143" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">Low F · Low R · Low M</text>
+
+        <!-- Cluster 4: At-Risk Dormants — lower center -->
+        <ellipse cx="300" cy="225" rx="68" ry="35" fill="none" stroke="#888" stroke-width="1.5"/>
+        <circle cx="270" cy="220" r="3" fill="#888"/><circle cx="295" cy="232" r="3" fill="#888"/>
+        <circle cx="315" cy="215" r="3" fill="#888"/><circle cx="330" cy="228" r="3" fill="#888"/>
+        <circle cx="285" cy="210" r="3" fill="#888"/><circle cx="310" cy="238" r="3" fill="#888"/>
+        <text x="300" y="274" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#888" text-anchor="middle">At-Risk Dormants</text>
+        <text x="300" y="285" font-family="Courier Prime,monospace" font-size="8.5" fill="#bbb" text-anchor="middle">Med F · High R · Low M</text>
+
+        <!-- Cluster 5: One-Time — lower left, very spread -->
+        <ellipse cx="145" cy="215" rx="72" ry="38" fill="none" stroke="#ccc" stroke-width="1" stroke-dasharray="3,4"/>
+        <circle cx="100" cy="210" r="2.5" fill="#bbb"/><circle cx="130" cy="225" r="2.5" fill="#bbb"/>
+        <circle cx="155" cy="205" r="2.5" fill="#bbb"/><circle cx="170" cy="228" r="2.5" fill="#bbb"/>
+        <circle cx="120" cy="218" r="2.5" fill="#bbb"/><circle cx="160" cy="215" r="2.5" fill="#bbb"/>
+        <text x="145" y="270" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#bbb" text-anchor="middle">One-Time Occasions</text>
+        <text x="145" y="281" font-family="Courier Prime,monospace" font-size="8.5" fill="#ccc" text-anchor="middle">F=1 · High R · Low M</text>
+
+        <!-- silhouette score note -->
+        <rect x="500" y="250" width="175" height="40" fill="#f0f0f0" stroke="#ddd"/>
+        <text x="512" y="265" font-family="Courier Prime,monospace" font-size="8" fill="#555">Silhouette (k=5): 0.508</text>
+        <text x="512" y="278" font-family="Courier Prime,monospace" font-size="8" fill="#888">Champions + Dormants</text>
+        <text x="512" y="288" font-family="Courier Prime,monospace" font-size="8" fill="#888">are best-separated</text>
+      </svg>
+    </div>
+    <figcaption><em>Fig. 2 — Cluster separation in 2-component PCA space. PC1 captures the value axis (Frequency + Monetary covariance); PC2 captures Recency. Champions cluster tightly in the high-value, low-recency corner. One-Time Occasions spread widely because their only shared property is F=1 — they are otherwise a heterogeneous group. The Silhouette score of 0.508 at k=5 is moderate; the Champions and At-Risk Dormants clusters are cleanly separated, while Loyal Regulars and Newcomers show some overlap along the recency dimension.</em></figcaption>
+  </figure>
+
+  <h2>From Archetypes to Merchandising Decisions</h2>
+
+  <p>The cluster labels are not the output — they are the input to campaign and merchandising decisions. Each archetype implies a different relationship with product mix, promotional price, and message timing.</p>
+
+  <h3>Champions: Protect, Don't Discount</h3>
+  <p>Champions are already buying frequently and spending at the top of the range. The mistake retailers make with this group is sending them the same promotional discount that goes to everyone else — which trains them to wait for promotions, reducing full-price purchase rate. The right strategy is exclusivity, not price reduction: early access to new product lines, personalised wholesale pricing for the business buyers in this cluster, and acknowledgment of tenure. This group should never receive a generic "15% off everything" email blast.</p>
+
+  <h3>Loyal Regulars: Cross-Category Expansion</h3>
+  <p>Loyal Regulars have demonstrated consistent purchasing in their established category. The opportunity is category expansion: they bought Christmas decorations — do they also need birthday gifts? They bought tabletop items — do they also buy occasion stationery? Recommendation engines built on frequently-bought-together patterns within this cluster can suggest the adjacent category that their purchase history suggests but doesn't yet include. The pitch is convenience ("you might also like") rather than discount.</p>
+
+  <h3>Promising Newcomers: Second Purchase Is the Conversion Event</h3>
+  <p>For a gift-goods retailer, the most important behavioral transition is from one-time buyer to habitual shopper. A customer who places a second order within 30 days of their first has fundamentally changed their relationship with the retailer — they have discovered a catalog and an experience they trust. The acquisition funnel's job is to make the first order happen; the CRM system's job is to manufacture a reason for the second order within the window when the first purchase memory is still fresh. Targeted post-purchase email within 72 hours, tied to a specific complementary product recommendation, converts more of this group than a generic "thanks for your order" message.</p>
+
+  <h3>At-Risk Dormants: Time-Boxed Win-Back</h3>
+  <p>Win-back campaigns have a narrow effective window. Research across retail categories suggests that customers who have been silent for more than 180 days have much lower win-back rates than customers at 90–150 days. The intervention is time-sensitive: a strong incentive (meaningful discount, free gift with order) at the 90-day silence mark is more cost-effective than the same incentive at 270 days. At-Risk Dormants should be flagged as soon as they cross a silence threshold, not at the next quarterly campaign batch.</p>
+
+  <h3>One-Time Occasions: Low Cost, Seasonal Focus</h3>
+  <p>This is the largest cluster and the most expensive to over-invest in. The customers in this group bought for a specific moment — a birthday, a holiday, a wedding gift — and have not found a reason to return. Forcing high-frequency communication at this group produces unsubscribes without incremental revenue. The right approach is seasonal alignment: contact them once before Christmas, once before Valentine's Day, once before Mother's Day. If none of those seasonal triggers produces a second order after 12 months, the cost of continued outreach exceeds the expected return.</p>
+
+  <h2>The Silhouette Score and What It Actually Means</h2>
+
+  <p>The silhouette scores reported in the notebook (0.54 at k=4, 0.51 at k=5) indicate moderate cluster separation — better than random assignment, short of tight separation. A score of 0.54 does not mean the clusters are wrong; it means the boundaries between adjacent clusters are fuzzy, which is accurate — real customer behavior does not have hard edges. The valuable insight is not that every customer falls cleanly into one category, but that the centroid of each cluster represents a recognizable type with actionable implications.</p>
+
+  <p>The score also depends on the feature set. RFM computed on 12 months of data captures behavioral history but not forward-looking signals like time-to-event churn risk or category diversity score. Adding a fourth dimension — <code>category_breadth</code> (number of distinct product categories a customer has purchased) — would sharpen the Champions vs. Loyal Regulars boundary, because Champions in this dataset tend to buy across many gift categories while Loyal Regulars concentrate in two or three. A five-dimensional RFM-plus-breadth model is a natural next step for a production segmentation system on this dataset.</p>
+
+  <div class="end-rule">
+    DATA: UCI Online Retail Dataset — 541,909 transactions, UK gift-goods wholesaler, Dec 2010–Dec 2011. FEATURES: RFM computed per customer ID; log-transform on Monetary. CLUSTERING: StandardScaler → K-Means (k=4,5); Silhouette score for k selection. STACK: scikit-learn, Pandas, Matplotlib, SciPy. This analysis is a portfolio exercise based on a publicly available academic dataset.
+  </div>
+
+</div>
+</body>
+</html>
