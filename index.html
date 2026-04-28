@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Who Actually Shops Here: Five Customer Archetypes from a UK Retail Dataset</title>
-  <meta name="description" content="How RFM features and K-means clustering turn 541,000 transactions into five recognizable customer types — and what each archetype tells the merchandising and CRM team.">
+  <meta name="description" content="How RFM features and K-means clustering turn 541,000 transactions into five recognizable customer types - and what each archetype tells the merchandising and CRM team.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -228,7 +228,7 @@
 <div class="opener">
   <p class="kicker">Customer Segmentation &nbsp;·&nbsp; E-commerce &nbsp;·&nbsp; RFM + K-Means</p>
   <h1>Who Actually Shops Here:<br>Five Customer Archetypes</h1>
-  <p class="deck">Transaction data doesn't contain customers — it contains receipts. The work of segmentation is converting 541,000 line items into recognizable human patterns that a merchandising team can act on.</p>
+  <p class="deck">Transaction data doesn't contain customers - it contains receipts. The work of segmentation is converting 541,000 line items into recognizable human patterns that a merchandising team can act on.</p>
   <hr class="opener-rule">
 </div>
 
@@ -237,7 +237,7 @@
 
   <h2>The Problem with Raw Transaction Data</h2>
 
-  <p>The UCI Online Retail dataset records every purchase from a UK gift-goods wholesaler between December 2010 and December 2011. It has 541,909 rows. Each row is a stock item on an invoice — quantity, unit price, customer ID, country, date. In that form it is a ledger, not an understanding of customers.</p>
+  <p>The UCI Online Retail dataset records every purchase from a UK gift-goods wholesaler between December 2010 and December 2011. It has 541,909 rows. Each row is a stock item on an invoice - quantity, unit price, customer ID, country, date. In that form it is a ledger, not an understanding of customers.</p>
 
   <p>The first transformation that makes segmentation possible is collapsing those rows to one row per customer with aggregate behavioral features. A customer who placed 12 orders totaling £4,200 over 11 months, with their most recent order 8 days before the data cutoff, is a fundamentally different entity from a customer who placed one order for £85 fourteen months ago. The ledger can't tell you that; the per-customer summary can.</p>
 
@@ -245,7 +245,7 @@
 
   <p><strong>Recency</strong> is the number of days since the customer's last purchase, measured from the data cutoff date. Low recency (purchased recently) is associated with higher probability of repeat purchase. High recency signals dormancy or departure.</p>
 
-  <p><strong>Frequency</strong> is the number of distinct invoices (orders) the customer placed. Frequency separates one-time buyers from occasional shoppers from habitual purchasers. For a gift-goods retailer with seasonal demand, frequency also captures whether a customer has transcended the "occasional occasion" mindset and is now a regular reorder account — likely a wholesaler.</p>
+  <p><strong>Frequency</strong> is the number of distinct invoices (orders) the customer placed. Frequency separates one-time buyers from occasional shoppers from habitual purchasers. For a gift-goods retailer with seasonal demand, frequency also captures whether a customer has transcended the "occasional occasion" mindset and is now a regular reorder account - likely a wholesaler.</p>
 
   <p><strong>Monetary</strong> is the total revenue the customer generated. Raw monetary value is correlated with frequency (more orders = more spending), so it is useful in combination with frequency to identify high-average-order customers who buy infrequently but spend heavily per visit.</p>
 
@@ -279,7 +279,7 @@ from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</code></pre>
 
-  <p>One data quality decision matters here: the dataset contains negative quantities, which are returns. Including them in revenue totals would understate monetary value for customers who make frequent returns. The notebook filters these out, treating net revenue as the relevant measure. Whether that is the right choice depends on whether return behavior itself is a signal worth preserving as a separate feature — for this analysis it is not, but a production segmentation system might add a <code>return_rate</code> feature to the RFM base.</p>
+  <p>One data quality decision matters here: the dataset contains negative quantities, which are returns. Including them in revenue totals would understate monetary value for customers who make frequent returns. The notebook filters these out, treating net revenue as the relevant measure. Whether that is the right choice depends on whether return behavior itself is a signal worth preserving as a separate feature - for this analysis it is not, but a production segmentation system might add a <code>return_rate</code> feature to the RFM base.</p>
 
   <p>The UK-based versus international customer split is another decision point. International customers (Germany, France, Australia) have different purchasing patterns partly because of shipping economics and partly because they index more toward wholesale. Including them in the same clustering pool produces mixed clusters that blend domestic retail behavior with international wholesale behavior. The notebook's choice to include all customers is defensible for a first-pass segmentation but would warrant country stratification in a production system.</p>
 
@@ -314,7 +314,7 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <div class="persona-action">
           → VIP access, early catalog previews<br>
           → Loyalty program invitation<br>
-          → No discount needed — they already buy
+          → No discount needed - they already buy
         </div>
       </div>
 
@@ -422,12 +422,12 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <div class="persona-action">
           → Seasonal re-engagement (Christmas, Valentine's)<br>
           → Low-cost automation; no agent effort<br>
-          → Do not suppress — low cost to keep in touch
+          → Do not suppress - low cost to keep in touch
         </div>
       </div>
 
     </div>
-    <figcaption><em>Fig. 1 — Centroid gallery. Each card represents one K-means cluster, profiled by its centroid values on Recency, Frequency, and Monetary. Bar fill indicates relative intensity within the dataset range (low Recency bar = recently purchased; high Recency bar = dormant). The campaign action row translates cluster membership into a specific CRM intervention, grounded in the feature profile rather than a generic "engage this segment" instruction.</em></figcaption>
+    <figcaption><em>Fig. 1 - Centroid gallery. Each card represents one K-means cluster, profiled by its centroid values on Recency, Frequency, and Monetary. Bar fill indicates relative intensity within the dataset range (low Recency bar = recently purchased; high Recency bar = dormant). The campaign action row translates cluster membership into a specific CRM intervention, grounded in the feature profile rather than a generic "engage this segment" instruction.</em></figcaption>
   </figure>
 
   <h2>Cluster Separation and What the Geometry Says</h2>
@@ -437,15 +437,15 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
     <div class="diagram-scroll">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" style="max-width:100%;display:block;">
         <rect width="700" height="320" fill="#fff"/>
-        <text x="30" y="22" font-family="Courier Prime,monospace" font-size="9" fill="#888" letter-spacing="1.5">FIG. 2 — CLUSTER SEPARATION IN RFM SPACE (PCA 2-COMPONENT PROJECTION)</text>
+        <text x="30" y="22" font-family="Courier Prime,monospace" font-size="9" fill="#888" letter-spacing="1.5">FIG. 2 - CLUSTER SEPARATION IN RFM SPACE (PCA 2-COMPONENT PROJECTION)</text>
 
         <!-- Axes -->
         <line x1="60" y1="270" x2="650" y2="270" stroke="#111" stroke-width="1.5"/>
         <line x1="60" y1="40"  x2="60"  y2="270" stroke="#111" stroke-width="1.5"/>
-        <text x="340" y="292" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">PC1 — Value axis (Monetary + Frequency)</text>
-        <text x="30" y="160" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle" transform="rotate(-90 30 160)">PC2 — Recency axis</text>
+        <text x="340" y="292" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">PC1 - Value axis (Monetary + Frequency)</text>
+        <text x="30" y="160" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle" transform="rotate(-90 30 160)">PC2 - Recency axis</text>
 
-        <!-- Cluster 1: Champions — upper right, tight -->
+        <!-- Cluster 1: Champions - upper right, tight -->
         <ellipse cx="540" cy="80" rx="52" ry="38" fill="none" stroke="#111" stroke-width="2"/>
         <circle cx="520" cy="75" r="4" fill="#111"/><circle cx="545" cy="68" r="4" fill="#111"/>
         <circle cx="558" cy="88" r="4" fill="#111"/><circle cx="530" cy="95" r="4" fill="#111"/>
@@ -453,7 +453,7 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <text x="540" y="130" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#111" text-anchor="middle">Champions</text>
         <text x="540" y="141" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">High F + M · Low R</text>
 
-        <!-- Cluster 2: Loyal Regulars — center right -->
+        <!-- Cluster 2: Loyal Regulars - center right -->
         <ellipse cx="430" cy="150" rx="55" ry="42" fill="none" stroke="#333" stroke-width="1.5"/>
         <circle cx="410" cy="145" r="3.5" fill="#333"/><circle cx="435" cy="138" r="3.5" fill="#333"/>
         <circle cx="450" cy="158" r="3.5" fill="#333"/><circle cx="420" cy="162" r="3.5" fill="#333"/>
@@ -462,7 +462,7 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <text x="430" y="205" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#333" text-anchor="middle">Loyal Regulars</text>
         <text x="430" y="216" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">Med F + M · Med R</text>
 
-        <!-- Cluster 3: Promising Newcomers — upper left, scattered -->
+        <!-- Cluster 3: Promising Newcomers - upper left, scattered -->
         <ellipse cx="180" cy="75" rx="65" ry="44" fill="none" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3"/>
         <circle cx="155" cy="68" r="3" fill="#555"/><circle cx="170" cy="85" r="3" fill="#555"/>
         <circle cx="195" cy="62" r="3" fill="#555"/><circle cx="210" cy="78" r="3" fill="#555"/>
@@ -471,7 +471,7 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <text x="180" y="132" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#555" text-anchor="middle">Newcomers</text>
         <text x="180" y="143" font-family="Courier Prime,monospace" font-size="8.5" fill="#888" text-anchor="middle">Low F · Low R · Low M</text>
 
-        <!-- Cluster 4: At-Risk Dormants — lower center -->
+        <!-- Cluster 4: At-Risk Dormants - lower center -->
         <ellipse cx="300" cy="225" rx="68" ry="35" fill="none" stroke="#888" stroke-width="1.5"/>
         <circle cx="270" cy="220" r="3" fill="#888"/><circle cx="295" cy="232" r="3" fill="#888"/>
         <circle cx="315" cy="215" r="3" fill="#888"/><circle cx="330" cy="228" r="3" fill="#888"/>
@@ -479,7 +479,7 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <text x="300" y="274" font-family="Outfit,sans-serif" font-size="9" font-weight="600" fill="#888" text-anchor="middle">At-Risk Dormants</text>
         <text x="300" y="285" font-family="Courier Prime,monospace" font-size="8.5" fill="#bbb" text-anchor="middle">Med F · High R · Low M</text>
 
-        <!-- Cluster 5: One-Time — lower left, very spread -->
+        <!-- Cluster 5: One-Time - lower left, very spread -->
         <ellipse cx="145" cy="215" rx="72" ry="38" fill="none" stroke="#ccc" stroke-width="1" stroke-dasharray="3,4"/>
         <circle cx="100" cy="210" r="2.5" fill="#bbb"/><circle cx="130" cy="225" r="2.5" fill="#bbb"/>
         <circle cx="155" cy="205" r="2.5" fill="#bbb"/><circle cx="170" cy="228" r="2.5" fill="#bbb"/>
@@ -494,36 +494,36 @@ rfm_scaled = scaler.fit_transform(rfm[['Recency','Frequency','Monetary_log']])</
         <text x="512" y="288" font-family="Courier Prime,monospace" font-size="8" fill="#888">are best-separated</text>
       </svg>
     </div>
-    <figcaption><em>Fig. 2 — Cluster separation in 2-component PCA space. PC1 captures the value axis (Frequency + Monetary covariance); PC2 captures Recency. Champions cluster tightly in the high-value, low-recency corner. One-Time Occasions spread widely because their only shared property is F=1 — they are otherwise a heterogeneous group. The Silhouette score of 0.508 at k=5 is moderate; the Champions and At-Risk Dormants clusters are cleanly separated, while Loyal Regulars and Newcomers show some overlap along the recency dimension.</em></figcaption>
+    <figcaption><em>Fig. 2 - Cluster separation in 2-component PCA space. PC1 captures the value axis (Frequency + Monetary covariance); PC2 captures Recency. Champions cluster tightly in the high-value, low-recency corner. One-Time Occasions spread widely because their only shared property is F=1 - they are otherwise a heterogeneous group. The Silhouette score of 0.508 at k=5 is moderate; the Champions and At-Risk Dormants clusters are cleanly separated, while Loyal Regulars and Newcomers show some overlap along the recency dimension.</em></figcaption>
   </figure>
 
   <h2>From Archetypes to Merchandising Decisions</h2>
 
-  <p>The cluster labels are not the output — they are the input to campaign and merchandising decisions. Each archetype implies a different relationship with product mix, promotional price, and message timing.</p>
+  <p>The cluster labels are not the output - they are the input to campaign and merchandising decisions. Each archetype implies a different relationship with product mix, promotional price, and message timing.</p>
 
   <h3>Champions: Protect, Don't Discount</h3>
-  <p>Champions are already buying frequently and spending at the top of the range. The mistake retailers make with this group is sending them the same promotional discount that goes to everyone else — which trains them to wait for promotions, reducing full-price purchase rate. The right strategy is exclusivity, not price reduction: early access to new product lines, personalised wholesale pricing for the business buyers in this cluster, and acknowledgment of tenure. This group should never receive a generic "15% off everything" email blast.</p>
+  <p>Champions are already buying frequently and spending at the top of the range. The mistake retailers make with this group is sending them the same promotional discount that goes to everyone else - which trains them to wait for promotions, reducing full-price purchase rate. The right strategy is exclusivity, not price reduction: early access to new product lines, personalised wholesale pricing for the business buyers in this cluster, and acknowledgment of tenure. This group should never receive a generic "15% off everything" email blast.</p>
 
   <h3>Loyal Regulars: Cross-Category Expansion</h3>
-  <p>Loyal Regulars have demonstrated consistent purchasing in their established category. The opportunity is category expansion: they bought Christmas decorations — do they also need birthday gifts? They bought tabletop items — do they also buy occasion stationery? Recommendation engines built on frequently-bought-together patterns within this cluster can suggest the adjacent category that their purchase history suggests but doesn't yet include. The pitch is convenience ("you might also like") rather than discount.</p>
+  <p>Loyal Regulars have demonstrated consistent purchasing in their established category. The opportunity is category expansion: they bought Christmas decorations - do they also need birthday gifts? They bought tabletop items - do they also buy occasion stationery? Recommendation engines built on frequently-bought-together patterns within this cluster can suggest the adjacent category that their purchase history suggests but doesn't yet include. The pitch is convenience ("you might also like") rather than discount.</p>
 
   <h3>Promising Newcomers: Second Purchase Is the Conversion Event</h3>
-  <p>For a gift-goods retailer, the most important behavioral transition is from one-time buyer to habitual shopper. A customer who places a second order within 30 days of their first has fundamentally changed their relationship with the retailer — they have discovered a catalog and an experience they trust. The acquisition funnel's job is to make the first order happen; the CRM system's job is to manufacture a reason for the second order within the window when the first purchase memory is still fresh. Targeted post-purchase email within 72 hours, tied to a specific complementary product recommendation, converts more of this group than a generic "thanks for your order" message.</p>
+  <p>For a gift-goods retailer, the most important behavioral transition is from one-time buyer to habitual shopper. A customer who places a second order within 30 days of their first has fundamentally changed their relationship with the retailer - they have discovered a catalog and an experience they trust. The acquisition funnel's job is to make the first order happen; the CRM system's job is to manufacture a reason for the second order within the window when the first purchase memory is still fresh. Targeted post-purchase email within 72 hours, tied to a specific complementary product recommendation, converts more of this group than a generic "thanks for your order" message.</p>
 
   <h3>At-Risk Dormants: Time-Boxed Win-Back</h3>
   <p>Win-back campaigns have a narrow effective window. Research across retail categories suggests that customers who have been silent for more than 180 days have much lower win-back rates than customers at 90–150 days. The intervention is time-sensitive: a strong incentive (meaningful discount, free gift with order) at the 90-day silence mark is more cost-effective than the same incentive at 270 days. At-Risk Dormants should be flagged as soon as they cross a silence threshold, not at the next quarterly campaign batch.</p>
 
   <h3>One-Time Occasions: Low Cost, Seasonal Focus</h3>
-  <p>This is the largest cluster and the most expensive to over-invest in. The customers in this group bought for a specific moment — a birthday, a holiday, a wedding gift — and have not found a reason to return. Forcing high-frequency communication at this group produces unsubscribes without incremental revenue. The right approach is seasonal alignment: contact them once before Christmas, once before Valentine's Day, once before Mother's Day. If none of those seasonal triggers produces a second order after 12 months, the cost of continued outreach exceeds the expected return.</p>
+  <p>This is the largest cluster and the most expensive to over-invest in. The customers in this group bought for a specific moment - a birthday, a holiday, a wedding gift - and have not found a reason to return. Forcing high-frequency communication at this group produces unsubscribes without incremental revenue. The right approach is seasonal alignment: contact them once before Christmas, once before Valentine's Day, once before Mother's Day. If none of those seasonal triggers produces a second order after 12 months, the cost of continued outreach exceeds the expected return.</p>
 
   <h2>The Silhouette Score and What It Actually Means</h2>
 
-  <p>The silhouette scores reported in the notebook (0.54 at k=4, 0.51 at k=5) indicate moderate cluster separation — better than random assignment, short of tight separation. A score of 0.54 does not mean the clusters are wrong; it means the boundaries between adjacent clusters are fuzzy, which is accurate — real customer behavior does not have hard edges. The valuable insight is not that every customer falls cleanly into one category, but that the centroid of each cluster represents a recognizable type with actionable implications.</p>
+  <p>The silhouette scores reported in the notebook (0.54 at k=4, 0.51 at k=5) indicate moderate cluster separation - better than random assignment, short of tight separation. A score of 0.54 does not mean the clusters are wrong; it means the boundaries between adjacent clusters are fuzzy, which is accurate - real customer behavior does not have hard edges. The valuable insight is not that every customer falls cleanly into one category, but that the centroid of each cluster represents a recognizable type with actionable implications.</p>
 
-  <p>The score also depends on the feature set. RFM computed on 12 months of data captures behavioral history but not forward-looking signals like time-to-event churn risk or category diversity score. Adding a fourth dimension — <code>category_breadth</code> (number of distinct product categories a customer has purchased) — would sharpen the Champions vs. Loyal Regulars boundary, because Champions in this dataset tend to buy across many gift categories while Loyal Regulars concentrate in two or three. A five-dimensional RFM-plus-breadth model is a natural next step for a production segmentation system on this dataset.</p>
+  <p>The score also depends on the feature set. RFM computed on 12 months of data captures behavioral history but not forward-looking signals like time-to-event churn risk or category diversity score. Adding a fourth dimension - <code>category_breadth</code> (number of distinct product categories a customer has purchased) - would sharpen the Champions vs. Loyal Regulars boundary, because Champions in this dataset tend to buy across many gift categories while Loyal Regulars concentrate in two or three. A five-dimensional RFM-plus-breadth model is a natural next step for a production segmentation system on this dataset.</p>
 
   <div class="end-rule">
-    DATA: UCI Online Retail Dataset — 541,909 transactions, UK gift-goods wholesaler, Dec 2010–Dec 2011. FEATURES: RFM computed per customer ID; log-transform on Monetary. CLUSTERING: StandardScaler → K-Means (k=4,5); Silhouette score for k selection. STACK: scikit-learn, Pandas, Matplotlib, SciPy. This analysis is a portfolio exercise based on a publicly available academic dataset.
+    DATA: UCI Online Retail Dataset - 541,909 transactions, UK gift-goods wholesaler, Dec 2010–Dec 2011. FEATURES: RFM computed per customer ID; log-transform on Monetary. CLUSTERING: StandardScaler → K-Means (k=4,5); Silhouette score for k selection. STACK: scikit-learn, Pandas, Matplotlib, SciPy. This analysis is a portfolio exercise based on a publicly available academic dataset.
   </div>
 
 </div>
